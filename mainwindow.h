@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 #include "loadcsv.h"
+#include <QtCharts>
+#include <QtCharts/QChartView>
+#include <QtCharts/QChart>
+#include <QtCharts/QLineSeries>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,20 +25,12 @@ public:
 private slots:
     void on_loadButton_clicked();
 
-    void on_pushButton_2_clicked();
-
-    void on_frame_customContextMenuRequested(const QPoint &pos);
-
-    void on_pushButton_3_clicked();
-
-    void on_pushButton_4_clicked();
-
-    void on_comboBox_activated(int index);
-
-    void on_comboBox_2_activated(int index);
+    void on_plotButton_clicked();
 
 private:
     Ui::MainWindow *ui;
     loadcsv csvloader;
+    QChartView *chartView;
 };
+
 #endif // MAINWINDOW_H

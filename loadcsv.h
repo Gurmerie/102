@@ -9,8 +9,17 @@ class loadcsv : public QObject
 {
     Q_OBJECT
 public:
-    loadcsv(QObject *parent = nullptr);
-    QStringList loadHeader(const QString &filePath, bool *ok = nullptr) const;
+    explicit loadcsv(QObject *parent = nullptr);
+
+    bool loadFile(const QString &filePath);
+
+    QStringList headers() const;
+
+    QVector<QStringList> rows() const;
+
+private :
+    QStringList m_headers;
+    QVector<QStringList> m_rows;
 };
 
 #endif // LOADCSV_H
