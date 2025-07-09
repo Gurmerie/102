@@ -27,6 +27,8 @@ private slots:
 
     void on_plotButton_clicked();
 
+    void on_exportButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     loadcsv csvloader;

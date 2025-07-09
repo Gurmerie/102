@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Charts)
+find_package(Qt6 REQUIRED COMPONENTS PrintSupport)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -25,8 +26,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         exporter.h
-
         loadcsv.h loadcsv.cpp
+        pdfexporter.h pdfexporter.cpp
+        images.qrc
 
     )
 # Define target properties for Android with Qt 6 as:
@@ -50,7 +52,8 @@ endif()
 target_link_libraries(102
     PRIVATE
         Qt${QT_VERSION_MAJOR}::Widgets
-        Qt::Charts
+        Qt6::Charts
+        Qt6::PrintSupport
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

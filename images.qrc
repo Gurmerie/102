@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../../Random/8242984.png</file>
+        <file>../../Random/istockphoto-1263032734-612x612.jpg</file>
+        <file>../../Random/CSV.png</file>
+        <file>../../Random/unnamed.png</file>
+    </qresource>
+</RCC>

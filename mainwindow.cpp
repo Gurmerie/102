@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include "loadcsv.h"
 #include <QMessageBox>
+#include "pdfexporter.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -100,9 +101,27 @@ void MainWindow::on_plotButton_clicked()
     }
 }
 
-
-void MainWindow::on_comboBox1_activated(int index)
+void MainWindow::on_exportButton_clicked()
 {
+    if (!chartView) {
+        QMessageBox::warning(this, tr("Export"), tr("There is no chart to export."));
+        return;
+    }
 
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save PDF."), "C:/Users/stj.egurmericliler/testingFiles", tr("PDF File (*.pdf)"));
+
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    pdfexporter exporter;
+    std::cout << "Exporting" << std::endl;
+    bool ok = exporter.exportWidgetToPDF(chartView, fileName, 15.0);
+    std::cout << "Exported" << std::endl;
+    if (!ok) {
+        QMessageBox::warning(this, tr("Export"), tr("Couldn't export chart to PDF."));
+    } else {
+        QMessageBox::information(this, tr("Export"), tr("Exported chart to PDF."));
+    }
 }
 
