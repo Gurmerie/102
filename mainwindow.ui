@@ -140,7 +140,7 @@ color: rgb(0, 0, 0);</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QComboBox" name="comboBox2">
+        <widget class="QComboBox" name="comboBox1">
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);</string>
@@ -148,7 +148,7 @@ color: rgb(0, 0, 0);</string>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox1">
+        <widget class="QComboBox" name="comboBox2">
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);</string>

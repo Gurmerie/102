@@ -8,6 +8,7 @@
 #include "loadcsv.h"
 #include <QMessageBox>
 #include "pdfexporter.h"
+#include "csvchart.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -65,34 +66,20 @@ void MainWindow::on_plotButton_clicked()
         return;
     }
 
-    QLineSeries *series = new QLineSeries;
-
-    for (const QStringList &row : rows) {
-        if (colX >= row.size() || colY >= row.size()) {
-            continue;
-        }
-        bool okX, okY;
-        double x = row[colX].toDouble(&okX);
-        double y = row[colY].toDouble(&okY);
-
-        if (okX && okY) {
-            series->append(x, y);
-        }
-    }
-    if (series->count() == 0) {
-        QMessageBox::information(this, tr("Plot"), tr("No numeric data found in the selected columns"));
-        delete series;
+    QStringList headers = csvloader.headers();
+    if (headers.isEmpty()) {
+        std::cerr << "--> Could not load headers." << std::endl;
         return;
     }
-    QChart *chart = new QChart;
 
-    chart->addSeries(series);
-    chart->createDefaultAxes();
-    // QValueAxis *axisX = qobject_cast<QValueAxis *>(chart->axisX());
-    // QValueAxis *axisY = qobject_cast<QValueAxis *>(chart->axisY());
-    // axisX->setRange(2000, 2003);
-    // axisY->setRange(100, 1000);
-    chart->setTitle(QString("%1 vs %2").arg(ui->comboBox1->currentText()).arg(ui->comboBox2->currentText()));
+    QChart *chart = new QChart;
+    chart = chartcsv.plotChart(headers, rows, colX, colY);
+
+    if (!chart) {
+        QMessageBox::warning(this, tr("Chart"), tr("Could not plot chart."));
+        return;
+    }
+
     if (chartView) {
         chartView->setChart(chart);
     } else {
@@ -114,7 +101,6 @@ void MainWindow::on_exportButton_clicked()
         return;
     }
 
-    pdfexporter exporter;
     std::cout << "Exporting" << std::endl;
     bool ok = exporter.exportWidgetToPDF(chartView, fileName, 15.0);
     std::cout << "Exported" << std::endl;

@@ -2,11 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "loadcsv.h"
 #include <QtCharts>
 #include <QtCharts/QChartView>
 #include <QtCharts/QChart>
 #include <QtCharts/QLineSeries>
+
+#include "loadcsv.h"
+#include "pdfexporter.h"
+#include "csvchart.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,6 +36,8 @@ private:
     Ui::MainWindow *ui;
     loadcsv csvloader;
     QChartView *chartView;
+    pdfexporter exporter;
+    csvchart chartcsv;
 };
 
 #endif // MAINWINDOW_H

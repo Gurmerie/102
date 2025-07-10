@@ -25,10 +25,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(102
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        exporter.h
+
         loadcsv.h loadcsv.cpp
         pdfexporter.h pdfexporter.cpp
         images.qrc
+        csvchart.h csvchart.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
