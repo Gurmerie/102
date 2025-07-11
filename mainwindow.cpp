@@ -5,10 +5,8 @@
 #include <QtCharts/QChart>
 #include <QtCharts/QLineSeries>
 #include <QFileDialog>
-#include "loadcsv.h"
 #include <QMessageBox>
-#include "pdfexporter.h"
-#include "csvchart.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -86,9 +84,15 @@ void MainWindow::on_plotButton_clicked()
         chartView = new QChartView(chart, this);
         ui->verticalLayout->addWidget(chartView);
     }
+
+    QList series = chart->series();
+    ui->comboBox3->clear();
+    for (QAbstractSeries *serie : series) {
+        ui->comboBox3->addItem(serie->name());
+    }
 }
 
-void MainWindow::on_exportButton_clicked()
+void MainWindow::on_exportButtonPdf_clicked()
 {
     if (!chartView) {
         QMessageBox::warning(this, tr("Export"), tr("There is no chart to export."));
@@ -109,5 +113,60 @@ void MainWindow::on_exportButton_clicked()
     } else {
         QMessageBox::information(this, tr("Export"), tr("Exported chart to PDF."));
     }
+}
+
+void MainWindow::on_addCurveButton_clicked()
+{
+    if (!chartView) {
+        QMessageBox::warning(this, tr("Add curve"), tr("Cannot add curve to chart, plot the chart first."));
+        return;
+    }
+
+    int colX = ui->comboBox1->currentIndex();
+    int colY = ui->comboBox2->currentIndex();
+
+    if (colX < 0 || colY < 0) {
+        QMessageBox::warning(this, tr("Plot"), tr("Please select both X and Y columns."));
+        return;
+    }
+
+    QVector<QStringList> rows = csvloader.rows();
+    if (rows.isEmpty()) {
+        std::cerr << "--> Could not load rows." << std::endl;
+        return;
+    }
+
+    QStringList headers = csvloader.headers();
+    if (headers.isEmpty()) {
+        std::cerr << "--> Could not load headers." << std::endl;
+        return;
+    }
+
+    QChart *chart = new QChart;
+    chart = chartcsv.addCurve(chartView->chart(), headers, rows, colX, colY);
+
+    if(!chart) {
+        QMessageBox::warning(this, tr("Add curve"), tr("Could not add curve."));
+        return;
+    }
+    QList series = chart->series();
+    ui->comboBox3->clear();
+    for (QAbstractSeries *serie : series) {
+        ui->comboBox3->addItem(serie->name());
+    }
+}
+
+void MainWindow::on_removeCurveButton_clicked() {
+    int sel = ui->comboBox3->currentIndex();
+    if (sel < 0) {
+        QMessageBox::warning(this, tr("Remove curve"), tr("Select a curve to remove"));
+        return;
+    }
+    QChart *chart = new QChart;
+    chart = chartView->chart();
+    QList series = chart->series();
+    QAbstractSeries *serie = series[sel];
+    chart->removeSeries(serie);
+    ui->comboBox3->removeItem(sel);
 }
 

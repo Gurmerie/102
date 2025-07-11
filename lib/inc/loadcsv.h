@@ -1,11 +1,13 @@
 #ifndef LOADCSV_H
 #define LOADCSV_H
 
+#include "exportLib_global.h"
+
 #include <QObject>
 #include <QString>
 #include <QStringList>
 
-class loadcsv : public QObject
+class EXPORTLIB_EXPORT loadcsv : public QObject
 {
     Q_OBJECT
 public:

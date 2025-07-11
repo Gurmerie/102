@@ -1,11 +1,13 @@
 #ifndef PDFEXPORTER_H
 #define PDFEXPORTER_H
 
+#include "exportLib_global.h"
+
 #include <QObject>
 #include <QWidget>
 #include <QString>
 
-class pdfexporter : public QObject
+class EXPORTLIB_EXPORT pdfexporter : public QObject
 {
     Q_OBJECT
 public:

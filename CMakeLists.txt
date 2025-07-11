@@ -10,9 +10,27 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-find_package(Qt6 REQUIRED COMPONENTS Charts)
-find_package(Qt6 REQUIRED COMPONENTS PrintSupport)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Charts)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS PrintSupport)
+
+#include_directories("${PROJECT_SOURCE_DIR}/lib/inc")
+#find_library(exportLib NAMES exportLib.dll
+#             PATHS ${PROJECT_SOURCE_DIR}/lib/release)
+
+set(EXPORTLIB_DIR "EXPORTLIB_DIR" "C:/Users/stj.egurmericliler/Documents/exportLib")
+set(EXPORTLIB_LIB_DIR ${EXPORTLIB_DIR} )
+
+add_library(exportLib SHARED IMPORTED)
+set_property(TARGET exportLib PROPERTY
+            IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/release/exportLib.lib)
+
+set_property(TARGET exportLib PROPERTY
+            IMPORTED_IMPLIB ${PROJECT_SOURCE_DIR}/lib/release/exportLib.lib)
+
+target_include_directories(exportLib INTERFACE
+            ${PROJECT_SOURCE_DIR}/lib/inc)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -25,12 +43,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(102
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-
-        loadcsv.h loadcsv.cpp
-        pdfexporter.h pdfexporter.cpp
         images.qrc
-        csvchart.h csvchart.cpp
-
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET 102 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -52,9 +65,11 @@ endif()
 
 target_link_libraries(102
     PRIVATE
+        Qt${QT_VERSION_MAJOR}::Core
         Qt${QT_VERSION_MAJOR}::Widgets
-        Qt6::Charts
-        Qt6::PrintSupport
+        Qt${QT_VERSION_MAJOR}::Charts
+        Qt${QT_VERSION_MAJOR}::PrintSupport
+        exportLib
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
